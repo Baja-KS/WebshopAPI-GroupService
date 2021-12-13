@@ -14,7 +14,7 @@ platform:
   arch: arm
 
 steps:
-- name: build_and_publish-arm
+- name: build_and_publish-linux-arm
   image:  plugins/docker
   settings:
     repo: bajaks/webshop-api-microservices.group-service
@@ -85,7 +85,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: build_and_publish-amd64
+  - name: build_and_publish-linux-amd64
     image:  plugins/docker
     settings:
       repo: bajaks/webshop-api-microservices.group-service
