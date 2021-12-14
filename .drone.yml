@@ -15,7 +15,7 @@ platform:
 
 steps:
 - name: build_and_publish-linux-arm
-  image:  plugins/docker
+  image:  banzaicloud/drone-kaniko #plugins/docker
   settings:
     repo: bajaks/webshop-api-microservices.group-service
     username:
@@ -85,7 +85,7 @@ platform:
 
 steps:
   - name: build_and_publish-linux-amd64
-    image:  plugins/docker
+    image:  banzaicloud/drone-kaniko #plugins/docker
     settings:
       repo: bajaks/webshop-api-microservices.group-service
       username:
