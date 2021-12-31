@@ -1,7 +1,7 @@
 
 kind: pipeline
 type: docker
-name: group-service-build-arm
+name: group-service-build-armv7
 
 trigger:
   branch:
