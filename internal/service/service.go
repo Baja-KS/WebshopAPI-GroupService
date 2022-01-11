@@ -1,15 +1,13 @@
 package service
 
 import (
-	"GroupService/internal/database"
 	"context"
+	"github.com/Baja-KS/WebshopAPI-GroupService/internal/database"
 	"gorm.io/gorm"
 	"os"
 )
 
 //GroupService should implement the Service interface
-
-
 
 type GroupService struct {
 	DB *gorm.DB
@@ -17,17 +15,17 @@ type GroupService struct {
 
 func (g *GroupService) GetAll(context.Context) ([]database.GroupOutWithCategories, error) {
 	var groups []database.Group
-	result:=g.DB.Find(&groups)
+	result := g.DB.Find(&groups)
 	if result.Error != nil {
 		return database.GroupArrayOutWithCategories(groups), result.Error
 	}
-	out:=database.GroupArrayOutWithCategories(groups)
-	return out,nil
+	out := database.GroupArrayOutWithCategories(groups)
+	return out, nil
 }
 
 func (g *GroupService) Create(ctx context.Context, data database.GroupIn) (string, error) {
-	group:=data.In()
-	result:=g.DB.Create(&group)
+	group := data.In()
+	result := g.DB.Create(&group)
 	if result.Error != nil {
 		return "Error", result.Error
 	}
@@ -36,15 +34,15 @@ func (g *GroupService) Create(ctx context.Context, data database.GroupIn) (strin
 
 func (g *GroupService) Update(ctx context.Context, id uint, data database.GroupIn) (string, error) {
 	var group database.Group
-	notFound:=g.DB.Where("id = ?",id).First(&group).Error
+	notFound := g.DB.Where("id = ?", id).First(&group).Error
 	if notFound != nil {
 		return "That group doesn't exist", notFound
 	}
-	if data.Name!=""  {
-		group.Name=data.Name
+	if data.Name != "" {
+		group.Name = data.Name
 	}
-	group.Description=data.Description
-	err:=g.DB.Save(&group).Error
+	group.Description = data.Description
+	err := g.DB.Save(&group).Error
 	if err != nil {
 		return "Error updating group", err
 	}
@@ -54,12 +52,12 @@ func (g *GroupService) Update(ctx context.Context, id uint, data database.GroupI
 
 func (g *GroupService) Delete(ctx context.Context, id uint) (string, error) {
 	var group database.Group
-	notFound:=g.DB.Where("id = ?",id).First(&group).Error
+	notFound := g.DB.Where("id = ?", id).First(&group).Error
 	if notFound != nil {
 		return "That group doesn't exist", notFound
 	}
 
-	err:=g.DB.Delete(&group).Error
+	err := g.DB.Delete(&group).Error
 	if err != nil {
 		return "Error deleting group", err
 	}
@@ -68,21 +66,21 @@ func (g *GroupService) Delete(ctx context.Context, id uint) (string, error) {
 }
 
 func (g *GroupService) Categories(ctx context.Context, id uint) ([]database.CategoryOut, error) {
-	categories,err:=database.GetCategories(id,os.Getenv("CATEGORY_SERVICE"))
+	categories, err := database.GetCategories(id, os.Getenv("CATEGORY_SERVICE"))
 	if err != nil {
-		return categories,err
+		return categories, err
 	}
-	return categories,nil
+	return categories, nil
 }
 
 func (g *GroupService) GetByID(ctx context.Context, id uint) (database.GroupOut, error) {
 	var group database.Group
-	notFound:=g.DB.Where("id = ?",id).First(&group).Error
+	notFound := g.DB.Where("id = ?", id).First(&group).Error
 	if notFound != nil {
 		return group.Out(), notFound
 	}
 
-	return group.Out(),nil
+	return group.Out(), nil
 }
 
 type Service interface {
@@ -92,6 +90,4 @@ type Service interface {
 	Delete(ctx context.Context, id uint) (string, error)
 	Categories(ctx context.Context, id uint) ([]database.CategoryOut, error)
 	GetByID(ctx context.Context, id uint) (database.GroupOut, error)
-
 }
-

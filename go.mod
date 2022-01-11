@@ -1,4 +1,4 @@
-module GroupService
+module github.com/Baja-KS/WebshopAPI-GroupService
 
 go 1.16
 

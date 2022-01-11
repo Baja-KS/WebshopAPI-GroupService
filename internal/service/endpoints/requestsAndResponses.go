@@ -1,26 +1,25 @@
 package endpoints
 
 import (
-	"GroupService/internal/database"
 	"context"
 	"encoding/json"
+	"github.com/Baja-KS/WebshopAPI-GroupService/internal/database"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 )
 
 func ParseIDFromURL(r *http.Request) (uint, error) {
-	params:=mux.Vars(r)
-	idStr:=params["id"]
-	id,err:=strconv.ParseUint(idStr,10,32)
+	params := mux.Vars(r)
+	idStr := params["id"]
+	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
-		return 0,err
+		return 0, err
 	}
-	return uint(id),nil
+	return uint(id), nil
 }
 
 type GetAllRequest struct {
-
 }
 
 type GetAllResponse struct {
@@ -31,10 +30,10 @@ type CreateRequest struct {
 }
 
 type CreateResponse struct {
- 	Message string `json:"message"`
+	Message string `json:"message"`
 }
 type UpdateRequest struct {
-	ID uint `json:"id,omitempty"`
+	ID   uint             `json:"id,omitempty"`
 	Data database.GroupIn `json:"data"`
 }
 
@@ -63,70 +62,67 @@ type GetByIDResponse struct {
 	Group database.GroupOut `json:"group"`
 }
 
-
 func DecodeGetAllRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var request GetAllRequest
-	return request,nil
+	return request, nil
 }
 func DecodeCreateRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var request CreateRequest
-	err:=json.NewDecoder(r.Body).Decode(&request)
+	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		return request,err
+		return request, err
 	}
-	return request,nil
+	return request, nil
 }
 func DecodeUpdateRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var request UpdateRequest
-	err:=json.NewDecoder(r.Body).Decode(&request)
+	err := json.NewDecoder(r.Body).Decode(&request)
 
 	if err != nil {
-		return request,err
+		return request, err
 	}
 
-	id,err:=ParseIDFromURL(r)
+	id, err := ParseIDFromURL(r)
 	if err != nil {
-		return request,err
+		return request, err
 	}
-	request.ID=id
+	request.ID = id
 
-	return request,nil
+	return request, nil
 }
 func DecodeDeleteRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var request DeleteRequest
 
-	id,err:=ParseIDFromURL(r)
+	id, err := ParseIDFromURL(r)
 	if err != nil {
-		return request,err
+		return request, err
 	}
-	request.ID=id
-	return request,nil
+	request.ID = id
+	return request, nil
 }
 func DecodeCategoriesRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var request CategoriesRequest
 
-
-	id,err:=ParseIDFromURL(r)
+	id, err := ParseIDFromURL(r)
 	if err != nil {
-		return request,err
+		return request, err
 	}
-	request.ID=id
+	request.ID = id
 
-	return request,nil
+	return request, nil
 }
 func DecodeGetByIDRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var request GetByIDRequest
 
-	id,err:=ParseIDFromURL(r)
+	id, err := ParseIDFromURL(r)
 	if err != nil {
-		return request,err
+		return request, err
 	}
-	request.ID=id
-	return request,nil
+	request.ID = id
+	return request, nil
 }
 
-
 func EncodeResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
-	w.Header().Set("Content-Type","application/json; charset=UTF-8")
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	return json.NewEncoder(w).Encode(response)
 }
